@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bean Bar — ช็อกโกแลตแท่งทำมือ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--cocoa:#2A150D;--ruby:#B3123F;--blush:#F6E4E6;--paper:#FFF9F6;--line:#E4CFCF;--ok:#1E7A4D}
+*{box-sizing:border-box}
+body{margin:0;font-family:Sarabun,sans-serif;color:var(--cocoa);background:var(--paper);line-height:1.6}
+h1,h2,h3{font-family:Mitr,sans-serif;font-weight:500;line-height:1.2;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header.hero{background:var(--cocoa);color:var(--blush);padding:56px 0 64px}
+.hero .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem)}
+.hero p{max-width:34ch;font-size:1.1rem;margin:16px 0 28px}
+.btn{display:inline-block;background:var(--ruby);color:#fff;border:0;border-radius:999px;padding:12px 28px;font:600 1rem Sarabun,sans-serif;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.1)}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #F2A900;outline-offset:2px}
+.hero img{width:100%;border-radius:12px;transform:rotate(3deg)}
+section{padding:56px 0}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;margin-top:24px}
+.product{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.product img{width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--blush)}
+.product .body{padding:18px 20px 22px}
+.price{font:500 1.5rem Mitr,sans-serif;color:var(--ruby)}
+.qty{display:flex;align-items:center;gap:10px;margin-top:12px}
+.qty button{width:38px;height:38px;border-radius:50%;border:1px solid var(--cocoa);background:#fff;font-size:1.2rem;cursor:pointer}
+.qty input{width:56px;text-align:center}
+.story{background:var(--blush)}
+.story p{max-width:62ch}
+form{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:14px;max-width:640px}
+label{display:grid;gap:4px;font-weight:600}
+input,textarea{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;width:100%}
+.summary{background:var(--blush);border-radius:8px;padding:12px 16px}
+.msg{padding:12px 16px;border-radius:8px;display:none}
+.msg.ok{display:block;background:#E3F4EA;color:var(--ok)}
+.msg.err{display:block;background:#FBE4E4;color:#9B1C1C}
+footer{background:var(--cocoa);color:var(--blush);padding:24px 0;text-align:center;font-size:.9rem}
+@media(max-width:720px){.hero .wrap{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:no-preference){.hero img{transition:transform .4s}.hero img:hover{transform:rotate(0)}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div>
+    <h1>ช็อกโกแลตแท่ง<br>เมล็ดคั่วเอง หักกินทีละช่อง</h1>
+    <p>ทำจากโกโก้ไทย คั่วและบดเป็นล็อตเล็ก ไม่ใส่สารกันบูด แท่งละ 50 กรัม</p>
+    <a class="btn" href="#order">สั่งซื้อเลย</a>
+  </div>
+  <img src="images/dark-70.svg" alt="ช็อกโกแลตดาร์ก 70%">
+</div></header>
+
+<section id="products"><div class="wrap">
+  <h2>เลือกรสที่ใช่</h2>
+  <div class="products" id="productList"></div>
+</div></section>
+
+<section class="story"><div class="wrap">
+  <h2>ทำไมต้องล็อตเล็ก</h2>
+  <p>เราคั่วเมล็ดโกโก้ครั้งละไม่กี่กิโลกรัม เพื่อคุมกลิ่นและความเข้มให้นิ่ง ทุกแท่งบรรจุและแพ็คกล่องกันกระแทกก่อนส่ง เก็บในที่เย็นได้นาน 6 เดือน</p>
+</div></section>
+
+<section id="order"><div class="wrap">
+  <h2>กรอกข้อมูลจัดส่ง</h2>
+  <p>เลือกจำนวนด้านบน แล้วกรอกที่อยู่ให้ครบ เราจะติดต่อกลับเพื่อแจ้งยอดโอน</p>
+  <form id="orderForm" novalidate>
+    <div class="summary" id="summary" aria-live="polite">ยังไม่ได้เลือกสินค้า</div>
+    <label>ชื่อ-นามสกุล<input name="name" required autocomplete="name"></label>
+    <label>เบอร์โทร<input name="phone" required inputmode="tel" pattern="0[0-9]{8,9}" placeholder="0812345678" autocomplete="tel"></label>
+    <label>ที่อยู่ (บ้านเลขที่ ถนน ตำบล/แขวง อำเภอ/เขต)<textarea name="address" rows="3" required autocomplete="street-address"></textarea></label>
+    <label>จังหวัด<input name="province" required autocomplete="address-level1"></label>
+    <label>รหัสไปรษณีย์<input name="zip" required inputmode="numeric" pattern="[0-9]{5}" autocomplete="postal-code"></label>
+    <label>หมายเหตุ (ถ้ามี)<input name="note"></label>
+    <button class="btn" type="submit" id="submitBtn">ยืนยันคำสั่งซื้อ</button>
+    <div class="msg" id="msg" role="status"></div>
+  </form>
+</div></section>
+<footer>Bean Bar · โปรเจกต์ส่งงานรายวิชา</footer>
+
+<script>
+// 1) วาง URL ของ Google Apps Script (Deploy > Web app) ตรงนี้
+const API_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+const SHIPPING = 40;
+// 2) เพิ่ม/แก้สินค้าได้ที่นี่ (รหัส SKU ต้องตรงกับใน Apps Script)
+const PRODUCTS = [
+  {sku:"CHOC-DK70", name:"ดาร์ก 70% เชียงราย", desc:"เข้ม ขมนุ่ม มีกลิ่นผลไม้แห้ง น้ำตาลน้อย", price:129, img:"images/dark-70.svg"},
+  {sku:"CHOC-MLKHZ", name:"มิลค์ เฮเซลนัท", desc:"หวานมัน หอมถั่วคั่ว ละลายในปากง่าย", price:119, img:"images/milk-hazelnut.svg"}
+];
+const qty = {};
+const list = document.getElementById("productList");
+PRODUCTS.forEach(p=>{
+  qty[p.sku]=0;
+  const el=document.createElement("article"); el.className="product";
+  el.innerHTML=`<img src="${p.img}" alt="${p.name}">
+  <div class="body"><h3>${p.name}</h3><p>${p.desc}</p><div class="price">${p.price} บาท</div>
+  <div class="qty"><button type="button" aria-label="ลด ${p.name}" data-d="-1">−</button>
+  <input type="number" min="0" max="20" value="0" aria-label="จำนวน ${p.name}">
+  <button type="button" aria-label="เพิ่ม ${p.name}" data-d="1">+</button></div></div>`;
+  const input=el.querySelector("input");
+  const set=v=>{qty[p.sku]=Math.max(0,Math.min(20,parseInt(v)||0));input.value=qty[p.sku];render();};
+  el.querySelectorAll("button").forEach(b=>b.onclick=()=>set(qty[p.sku]+Number(b.dataset.d)));
+  input.onchange=()=>set(input.value);
+  list.appendChild(el);
+});
+function total(){return PRODUCTS.reduce((s,p)=>s+p.price*qty[p.sku],0);}
+function render(){
+  const items=PRODUCTS.filter(p=>qty[p.sku]>0);
+  document.getElementById("summary").innerHTML = items.length
+    ? items.map(p=>`${p.name} × ${qty[p.sku]} = ${p.price*qty[p.sku]} บาท`).join("<br>")+`<br>ค่าส่ง ${SHIPPING} บาท · <b>รวม ${total()+SHIPPING} บาท</b>`
+    : "ยังไม่ได้เลือกสินค้า";
+}
+const form=document.getElementById("orderForm"), msg=document.getElementById("msg"), btn=document.getElementById("submitBtn");
+function show(t,c){msg.className="msg "+c;msg.textContent=t;}
+form.addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(total()===0) return show("กรุณาเลือกสินค้าอย่างน้อย 1 แท่ง","err");
+  if(!form.checkValidity()) {form.reportValidity();return;}
+  if(API_URL.startsWith("PASTE")) return show("ยังไม่ได้ตั้งค่า API_URL ใน index.html","err");
+  const d=Object.fromEntries(new FormData(form));
+  d.items=PRODUCTS.filter(p=>qty[p.sku]>0).map(p=>({sku:p.sku,qty:qty[p.sku]}));
+  btn.disabled=true; btn.textContent="กำลังส่ง...";
+  try{
+    // text/plain + no-cors เพื่อไม่ติด CORS preflight ของ Apps Script
+    await fetch(API_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)});
+    show("รับคำสั่งซื้อแล้ว! เราจะติดต่อกลับทางเบอร์ที่ให้ไว้","ok");
+    form.reset(); PRODUCTS.forEach(p=>qty[p.sku]=0); document.querySelectorAll(".qty input").forEach(i=>i.value=0); render();
+  }catch(err){show("ส่งไม่สำเร็จ ลองใหม่อีกครั้ง","err");}
+  btn.disabled=false; btn.textContent="ยืนยันคำสั่งซื้อ";
+});
+</script>
+</body>
+</html>
